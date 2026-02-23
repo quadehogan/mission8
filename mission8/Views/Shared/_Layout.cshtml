@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/mission8.styles.css" asp-append-version="true"/>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100 bg-light">
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">mission8</a>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" asp-area="" asp-controller="Home" asp-action="Index">mission8</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -21,25 +21,25 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Add">Add</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
-<div class="container">
+<div class="container my-4 flex-grow-1">
     <main role="main" class="pb-3">
         @RenderBody()
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2026 - mission8 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<footer class="bg-dark text-white py-3 mt-auto">
+    <div class="container text-center">
+        <small>&copy; 2026 - mission8</small>
     </div>
 </footer>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
