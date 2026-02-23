@@ -1,6 +1,58 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
+@{
+    ViewData["Title"] = "Add Task";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">Add Task</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" asp-for="TaskId"/>
+
+                    <div class="mb-3">
+                        <label asp-for="Task" class="form-label">Task Name</label>
+                        <input asp-for="Task" class="form-control"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="DueDate" class="form-label">Due Date</label>
+                        <input asp-for="DueDate" type="date" class="form-control"/>
+                        <span asp-validation-for="DueDate" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Quadrant" class="form-label">Quadrant</label>
+                        <input asp-for="Quadrant" class="form-control"/>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Category" class="form-label">Category</label>
+                        <select asp-for="Category" class="form-select">
+                            <option value="">-- Select --</option>
+                            <option value="home">Home</option>
+                            <option value="school">School</option>
+                            <option value="work">Work</option>
+                            <option value="church">Church</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Completed" class="form-label">Completed</label>
+                        <select asp-for="Completed" class="form-select">
+                            <option value="">-- Select --</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-dark">Create Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
