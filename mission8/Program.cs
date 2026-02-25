@@ -1,15 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+using mission8.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add MVC (controllers + views) to the service container
 builder.Services.AddControllersWithViews();
+
+// Register EF Core with SQLite -- connection string comes from appsettings.json
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Register the repository using the interface (Repository Pattern)
+// AddScoped means a new instance is created per HTTP request
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -20,10 +30,10 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+// Default route: HomeController -> Index action
 app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();
