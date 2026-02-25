@@ -1,8 +1,119 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@* ──────────────────────────────────────────────────────────────────────────────
+   Quadrants View — Stephen Covey's "Put First Things First" Time Management Matrix
+
+   Displays incomplete tasks in a 2×2 Bootstrap grid, one panel per quadrant.
+   Expects the controller to pass all tasks (or just incomplete ones).
+   The view filters to Completed == false as a safeguard.
+
+   Expected controller actions (to be wired up by teammate):
+     GET  Home/Index          → returns this view with IEnumerable<Task>
+     POST Home/MarkComplete/5 → sets Completed = true, redirects back
+     GET  Home/Edit/5         → returns the Edit form
+     POST Home/Delete/5       → deletes the task, redirects back
+   ────────────────────────────────────────────────────────────────────────────── *@
+
+@model IEnumerable<mission8.Models.Task>
+
+@{
+    ViewData["Title"] = "Task Quadrants";
+
+    var incompleteTasks = Model?.Where(t => !t.Completed)
+                         ?? Enumerable.Empty<mission8.Models.Task>();
+
+    var quadrants = new[]
+    {
+        new { Id = 1, Label = "Quadrant I",   Subtitle = "Important / Urgent",
+              Border = "border-danger",  BgClass = "bg-danger-subtle",  TextClass = "text-danger-emphasis" },
+        new { Id = 2, Label = "Quadrant II",  Subtitle = "Important / Not Urgent",
+              Border = "border-success", BgClass = "bg-success-subtle", TextClass = "text-success-emphasis" },
+        new { Id = 3, Label = "Quadrant III", Subtitle = "Not Important / Urgent",
+              Border = "border-warning", BgClass = "bg-warning-subtle", TextClass = "text-warning-emphasis" },
+        new { Id = 4, Label = "Quadrant IV",  Subtitle = "Not Important / Not Urgent",
+              Border = "border-info",    BgClass = "bg-info-subtle",    TextClass = "text-info-emphasis" }
+    };
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mb-4">
+    <h2 class="fw-bold">Put First Things First</h2>
+    <p class="text-muted mb-0">Stephen Covey's Time Management Matrix</p>
+</div>
+
+@* ── Axis labels above the grid ────────────────────────────────────────────── *@
+<div class="row g-3 mb-2 d-none d-md-flex">
+    <div class="col-md-6 text-center">
+        <span class="badge bg-dark px-3 py-2 fs-6">Urgent</span>
+    </div>
+    <div class="col-md-6 text-center">
+        <span class="badge bg-secondary px-3 py-2 fs-6">Not Urgent</span>
+    </div>
+</div>
+
+@* ── 2×2 Quadrant Grid ────────────────────────────────────────────────────── *@
+<div class="row g-3">
+    @foreach (var q in quadrants)
+    {
+        var qTasks = incompleteTasks.Where(t => t.Quadrant == q.Id);
+
+        <div class="col-md-6">
+            <div class="card h-100 @q.Border shadow-sm">
+                <div class="card-header fw-bold @q.BgClass @q.TextClass">
+                    @q.Label &mdash; @q.Subtitle
+                </div>
+                <div class="card-body p-2">
+                    @if (!qTasks.Any())
+                    {
+                        <p class="text-muted fst-italic mb-0 p-2">No tasks in this quadrant.</p>
+                    }
+                    else
+                    {
+                        @foreach (var task in qTasks)
+                        {
+                            <div class="card mb-2 border-0 @q.BgClass bg-opacity-50">
+                                <div class="card-body py-2 px-3">
+                                    <div class="d-flex justify-content-between align-items-start gap-2">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1 fw-semibold">@task.Task</h6>
+                                            <small class="text-muted">
+                                                @if (task.DueDate != null)
+                                                {
+                                                    <span>Due: @task.DueDate?.ToString("MMM dd, yyyy")</span>
+                                                    <span class="mx-1">|</span>
+                                                }
+                                                <span class="text-capitalize">@task.Category</span>
+                                            </small>
+                                        </div>
+                                        <div class="d-flex gap-1 flex-shrink-0">
+                                            <form asp-controller="Home" asp-action="MarkComplete"
+                                                  asp-route-id="@task.TaskId" method="post">
+                                                <button type="submit"
+                                                        class="btn btn-outline-success btn-sm"
+                                                        title="Mark as Completed">
+                                                    Complete
+                                                </button>
+                                            </form>
+                                            <a asp-controller="Home" asp-action="Edit"
+                                               asp-route-id="@task.TaskId"
+                                               class="btn btn-outline-secondary btn-sm"
+                                               title="Edit Task">
+                                                Edit
+                                            </a>
+                                            <form asp-controller="Home" asp-action="Delete"
+                                                  asp-route-id="@task.TaskId" method="post"
+                                                  onsubmit="return confirm('Are you sure you want to delete this task?');">
+                                                <button type="submit"
+                                                        class="btn btn-outline-danger btn-sm"
+                                                        title="Delete Task">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    }
 </div>
