@@ -6,19 +6,19 @@
    The view filters to Completed == false as a safeguard.
 
    Expected controller actions (to be wired up by teammate):
-     GET  Home/Index          → returns this view with IEnumerable<Task>
+     GET  Home/Index          → returns this view with IEnumerable<ToDoTask>
      POST Home/MarkComplete/5 → sets Completed = true, redirects back
      GET  Home/Edit/5         → returns the Edit form
      POST Home/Delete/5       → deletes the task, redirects back
    ────────────────────────────────────────────────────────────────────────────── *@
 
-@model IEnumerable<mission8.Models.Task>
+@model IEnumerable<mission8.Models.ToDoTask>
 
 @{
     ViewData["Title"] = "Task Quadrants";
 
     var incompleteTasks = Model?.Where(t => !t.Completed)
-                         ?? Enumerable.Empty<mission8.Models.Task>();
+                         ?? Enumerable.Empty<mission8.Models.ToDoTask>();
 
     var quadrants = new[]
     {
@@ -79,7 +79,7 @@
                                                     <span>Due: @task.DueDate?.ToString("MMM dd, yyyy")</span>
                                                     <span class="mx-1">|</span>
                                                 }
-                                                <span class="text-capitalize">@task.Category</span>
+                                                <span class="text-capitalize">@task.Category?.CategoryName</span>
                                             </small>
                                         </div>
                                         <div class="d-flex gap-1 flex-shrink-0">
