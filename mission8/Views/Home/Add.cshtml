@@ -22,7 +22,6 @@
                     <div class="mb-3">
                         <label asp-for="DueDate" class="form-label">Due Date</label>
                         <input asp-for="DueDate" type="date" class="form-control"/>
-                        <span asp-validation-for="DueDate" class="text-danger small"></span>
                     </div>
 
                     <div class="mb-3">
@@ -53,6 +52,8 @@
                     <div class="d-grid">
                         <button type="submit" class="btn btn-dark">Create Task</button>
                     </div>
+                    
+                    <div asp-validation-summary="All"></div>
                 </form>
             </div>
         </div>

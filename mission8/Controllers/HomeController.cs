@@ -32,17 +32,17 @@ public class HomeController : Controller
 
     // POST: Home/Add - Save a new task
     [HttpPost]
-    public IActionResult Add(ToDoTask task)
+    public IActionResult Add(ToDoTask taskToAdd)
     {
         if (ModelState.IsValid)
         {
-            _repo.AddTask(task);
+            _repo.AddTask(taskToAdd);
             return RedirectToAction("Index");
         }
 
         // If validation fails, return to form with categories
         ViewBag.Categories = _repo.GetCategories();
-        return View(task);
+        return View(taskToAdd);
     }
 
     // GET: Home/Edit/{id} - Show form to edit an existing task
@@ -56,22 +56,22 @@ public class HomeController : Controller
         }
 
         ViewBag.Categories = _repo.GetCategories();
-        return View(task);
+        return View("Add",task);
     }
 
     // POST: Home/Edit - Update an existing task
     [HttpPost]
-    public IActionResult Edit(ToDoTask task)
+    public IActionResult Edit(ToDoTask taskToEdit)
     {
         if (ModelState.IsValid)
         {
-            _repo.UpdateTask(task);
+            _repo.UpdateTask(taskToEdit);
             return RedirectToAction("Index");
         }
 
         // If validation fails, return to form with categories
         ViewBag.Categories = _repo.GetCategories();
-        return View(task);
+        return View("Add", taskToEdit);
     }
 
     // POST: Home/Delete/{id} - Delete a task
@@ -88,11 +88,6 @@ public class HomeController : Controller
     {
         _repo.MarkCompleted(id);
         return RedirectToAction("Index");
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
